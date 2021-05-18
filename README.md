@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # IGVC 2019 [Updated 6th June]
 
 Trial branch is the current branch.
@@ -48,3 +49,6 @@ where the parameter name can be found from ```rosparam list```
 
 3.  The node outdoor_waypoint_nav has to be restarted before every run, since it contains a flag that allows for only one entry into no man's land.
 # RISS-2level-pathplanning-control
+=======
+# RISS-2level-pathplanning-control
+>>>>>>> b2ce7e6681c15beb9fc4f29ca150cf6d3855d661
