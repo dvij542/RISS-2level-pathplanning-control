@@ -1,0 +1,15 @@
+\subsubsection usage Usage
+\verbatim
+<node name="hybrid_astar" pkg="dynamic_tutorials" type="hybrid_astar">
+  <param name="alpha" type="double" value="50.0" />
+  <param name="dist_dubin_shot" type="double" value="8.0" />
+  <param name="max_obs_dist" type="double" value="50.0" />
+  <param name="carlx" type="int" value="-5" />
+  <param name="carly" type="int" value="-5" />
+  <param name="carrx" type="int" value="5" />
+  <param name="carry" type="int" value="5" />
+  <param name="planner_grid_resolution" type="double" value="0.5" />
+  <param name="WT" type="double" value="0.3" />
+</node>
+\endverbatim
+

@@ -1,0 +1,14 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~alpha" : \b [double] Alpha min: 0.0, default: 50.0, max: 100.0
+- \b "~dist_dubin_shot" : \b [double] Min_dist_from_obst min: 0.0, default: 8.0, max: 100.0
+- \b "~max_obs_dist" : \b [double] Maximum Obstacle distance min: 0.0, default: 50.0, max: 100.0
+- \b "~carlx" : \b [int] Car upper-left x min: -100, default: -5, max: 100
+- \b "~carly" : \b [int] Car upper-left y min: -100, default: -5, max: 100
+- \b "~carrx" : \b [int] Car bottom-right x min: -100, default: 5, max: 100
+- \b "~carry" : \b [int] Car bottom-right y min: -100, default: 5, max: 100
+- \b "~planner_grid_resolution" : \b [double] Planner Reslution  min: 0.0, default: 0.5, max: 2.0
+- \b "~WT" : \b [double] Voronoi Weight min: 0.0, default: 0.3, max: 5.0
+
