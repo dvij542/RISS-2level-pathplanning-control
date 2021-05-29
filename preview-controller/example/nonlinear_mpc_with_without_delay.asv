@@ -1,0 +1,55 @@
+nx = 2;
+ny = 2;
+nu = 1;
+nlobj = nlmpc(nx,ny,nu);
+Ts = 0.075;
+nlobj.Ts = Ts;
+nlobj.PredictionHorizon = 100;
+nlobj.ControlHorizon = 100;
+nlobj.Model.StateFcn = "myStateFunction";
+nlobj.Model.IsContinuousTime = true;
+nlobj.Optimization.ReplaceStandardCost = true;
+for ct = 1:nu
+    nlobj.MV(ct).Min = -2;
+    nlobj.MV(ct).Max = 2;
+end
+%nlobj.Model.NumberOfParameters = 1;
+nlobj.Optimization.CustomCostFcn = "myCostFunction";
+delay = 3;
+x_curr = [1; -1];
+buffer = zeros(1,delay);
+cmd = 0;
+trajectory = zeros(3,30);
+for i = 1:79
+    trajectory(1,i) = i;
+    trajectory(2,i) = x_curr(1);
+    trajectory(3,i) = x_curr(2);
+    x_new = x_curr;
+    %for j = 1:delay
+    %    x_new = mysys.propagate(x_new,buffer(delay+1-j));
+    %end
+    %disp(x_new)
+    [u_next,~,seq] = nlmpcmove(nlobj,x_new,0);
+    disp(u_next);
+    %disp(seq.Xopt);
+    cmd = u_next(1);
+    x_curr(1) = x_curr(1) + Ts*(0.5*x_curr(1) + 0.15*x_curr(1)^2 + x_curr(2) + 0.6*cmd);
+    x_curr(2) = seq.Xopt(2,2);%x_curr(2) + Ts*(x_curr(1)-0.2*x_curr(2)^2+0.6*cmd);
+    %[buffer, cmd] = push(buffer,u_next);
+    %x_curr = mysys.propagate(x_curr, cmd); % + add some noise here
+end
+
+plot(trajectory(2,1:79),trajectory(3,1:79));%,trajectory2(2,1:29),trajectory2(3,1:29),trajectory3(2,1:10),trajectory3(3,1:10));%,trajectory(1,1:2889),trajectory(3,1:2889));
+%plot(trajectory2(2,1:29),trajectory2(3,1:29));
+axis equal
+function [updated_buffer, apply_cmd] = push(buffer,curr_cmd)
+    updated_buffer = zeros(1,size(buffer,2));
+    apply_cmd = buffer(1,size(buffer,2));
+    for i = 2:size(buffer,2)
+        updated_buffer(1,i) = buffer(1,i-1);
+    end
+    updated_buffer(1,1) = curr_cmd;
+end
+
+
+
