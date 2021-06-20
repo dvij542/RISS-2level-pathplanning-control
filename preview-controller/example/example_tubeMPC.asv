@@ -48,8 +48,6 @@ for i = 1:6
     if i>1 
         mpc.show_prediction(x);
         pause(1);
-        filename = strcat(savedir_name, 'tmpc_seq', number2string(k), '.png');
-        saveas(gcf, char(filename)); % removing this line makes the code much faster
     end
     disp(x);
     for j=1:s
@@ -60,8 +58,9 @@ for i = 1:6
         if i>1 
             mpc.show_prediction(x);
             pause(1);
-            filename = strcat(savedir_name, 'tmpc_seq', number2string(k), '.png');
-            saveas(gcf, char(filename)); % removing this line makes the code much faster
+            %     filename = strcat(savedir_name, 'tmpc_seq', number2string(i), '.png');
+%     saveas(gcf, char(filename)); % removing this line makes the code much faster
+
         end
     end
     trajectory1(:,k:k) = x;
@@ -78,13 +77,13 @@ for i = 1:6
     k=k+1;
         
     [u_nom,x_nom] = mpc.solve_delay(x_curr,s);
-%     filename = strcat(savedir_name, 'tmpc_seq', number2string(i), '.png');
+    filename = strcat(savedir_name, 'tmpc_seq', number2string(i), '.png');
     saveas(gcf, char(filename)); % removing this line makes the code much faster
     clf;
 end
 
 trajectory1(:,k:k) = x;
-%k=k+1;
+k=k+1;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -1,5 +1,5 @@
-addpath('../src/')
-addpath('../src/utils/')
+addpath('src/')
+addpath('src/utils/')
 
 % specify your own discrete linear system
 A = [1 1; 0 1];
@@ -10,10 +10,11 @@ R = 0.1;
 % construct a convex set of system noise (2dim here)
 W_vertex = [0.15, 0.15; 0.15, -0.15; -0.15, -0.15; -0.15, 0.15];
 W = Polyhedron(W_vertex);
+deltaT = 0.3;
 
 % construct disturbance Linear system
 % note that disturbance invariant set Z is computed and stored as member variable in the constructor.
-disturbance_system = DisturbanceLinearSystem(A, B, Q, R, W); 
+disturbance_system = DisturbanceLinearSystem_delay(A, B, Q, R, W, Uc_vertex, deltaT); 
 
 % you can see that with any disturbance bounded by W, the state is guaranteed to inside Z
 x = zeros(2); % initial state 

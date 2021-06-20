@@ -76,8 +76,47 @@ for i = 1:279
     
 end
 
+nx = 1;
+ny = 1;
+nu = 1;
+nlobj2 = nlmpc(nx,ny,nu);
+Ts = 0.1;
+nlobj2.Ts = Ts;
+nlobj2.PredictionHorizon = 20;
+nlobj2.ControlHorizon = 20;
+nlobj2.Model.StateFcn = "myStateFunction_low";
+nlobj2.Model.IsContinuousTime = true;
+nlobj2.Weights.OutputVariables = [1.0];
+nlobj2.Weights.ManipulatedVariables = [0.15];
+nlobj2.Optimization.ReplaceStandardCost = false;
+for ct = 1:nu
+    nlobj.MV(ct).Min = -2;
+    nlobj.MV(ct).Max = 2;
+end
 
-plot(trajectory(1,1:279),ref(1:279,1),trajectory(1,1:279),trajectory(2,1:279),trajectory2(1,1:279),trajectory2(2,1:279));
+tao = 1;
+x_curr = [0; 0; 0];
+cmd = 0;
+u_next = 0;
+trajectory3 = zeros(2,300);
+
+for i = 1:279
+    trajectory3(1,i) = i;
+    trajectory3(2,i) = x_curr(2);
+    x_new = x_curr;
+    [~,~,info] = nlmpcmove(nlobj,x_new,u_next,ref(i:(i+20),:));
+    %disp(u_next);
+    u_next = nlmpcmove(nlobj2,cmd,u_next,info.MVopt);
+    cmd = cmd + tao*(u_next-cmd)*Ts;
+    disp(cmd);
+    x_curr(1) = x_curr(1) + Ts*(A(1,1)*x_curr(1)+A(1,2)*x_curr(2)+B(1)*x_curr(3));
+    x_curr(2) = x_curr(2) + Ts*(A(2,1)*x_curr(1)+A(2,2)*x_curr(2)+B(2)*x_curr(3));
+    x_curr(3) = cmd;
+    
+end
+
+
+plot(trajectory(1,1:279),ref(1:279,1),trajectory(1,1:279),trajectory(2,1:279),trajectory2(1,1:279),trajectory2(2,1:279),trajectory3(1,1:279),trajectory3(2,1:279));
 
 function [updated_buffer, apply_cmd] = push(buffer,curr_cmd)
     updated_buffer = zeros(1,size(buffer,2));
